@@ -19,7 +19,7 @@ class AddFishForm extends React.Component {
 			image: this.imageRef.value.value
 		};
 
-		console.log(fish);
+		this.props.addFish(fish);
 	};
 
 	render() {
