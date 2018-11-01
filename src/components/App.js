@@ -12,6 +12,7 @@ class App extends React.Component {
 		order: {}
 	};
 
+	// methods that change state
 	addFish = (fish) => {
 		// 1. take a copy of existing fishes
 		const fishes = { ...this.state.fishes };
@@ -26,9 +27,20 @@ class App extends React.Component {
 		// })
 	};
 
+	addToOrder = (key) => {
+		// 1. take a copy of state
+		const order = { ...this.state.order }
+		// 2. either add to order, or update the number in our order
+		order[key] = order[key] + 1 || 1;
+		// 3. call setState to update state object
+		this.setState({ order });
+	}
+
 	loadSampleFishes  = () => {
 		this.setState({fishes: sampleFishes});
 	}
+
+	// life cycle methods
 
 	render() {
 		return (
@@ -37,7 +49,12 @@ class App extends React.Component {
 					<Header tagline="Fresh Seafood Market" />
 					<ul className='fishes'>
 						{Object.keys(this.state.fishes).map(key => (
-							<Fish details={this.state.fishes[key]} key={key} />
+							<Fish
+								details={this.state.fishes[key]}
+								key={key}
+								index={key}
+								addToOrder={this.addToOrder}
+							/>
 						))}
 					</ul>
 				</div>
