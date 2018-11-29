@@ -15,10 +15,22 @@ class App extends React.Component {
 
 	// syncing state with database when app is mounting
 	componentDidMount() {
-		this.ref = base.syncState(`${this.props.match.params.storeId}/fishes`, {
+		const storeId = this.props.match.params.storeId;
+		// first re-instate local localStorage
+		const localStorageRef = localStorage.getItem(storeId);
+		if(localStorageRef) {
+			this.setState({order: JSON.parse(localStorageRef)});
+		}
+
+		this.ref = base.syncState(`${storeId}/fishes`, {
 			context: this,
 			state: 'fishes'
 		});
+	}
+
+	// save order state data when app updates
+	componentDidUpdate() {
+		localStorage.setItem(this.props.match.params.storeId, JSON.stringify(this.state.order));
 	}
 
 	// cleaning up to avoid memory leaks when app has unmounted
