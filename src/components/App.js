@@ -5,12 +5,26 @@ import Inventory from './Inventory';
 import Order from './Order';
 import sampleFishes from '../sample-fishes';
 import Fish from './Fish';
+import base from '../base';
 
 class App extends React.Component {
 	state = {
 		fishes: {},
 		order: {}
 	};
+
+	// syncing state with database when app is mounting
+	componentDidMount() {
+		this.ref = base.syncState(`${this.props.match.params.storeId}/fishes`, {
+			context: this,
+			state: 'fishes'
+		});
+	}
+
+	// cleaning up to avoid memory leaks when app has unmounted
+	componentWillUnmount() {
+		base.removeBinding(this.ref);
+	}
 
 	// methods that change state
 	addFish = (fish) => {
